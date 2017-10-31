@@ -1,0 +1,61 @@
+---
+- name: Manage NG-LAB instances' state on GCE
+  hosts: localhost
+  gather_facts: True
+  connection: local
+
+  vars:
+    zone: us-east1-b
+
+  tasks:
+    - name: Stop OCP node instances
+      gce:
+          name: "{{ item }}"
+          zone: "{{ zone }}"
+          state: stopped
+      register: gce
+      with_items:
+        - ocp-node-1
+        - ocp-node-2
+        - ocp-node-3
+        - ocp-node-4
+      tags:
+        - stop_nodes
+
+    - name: Stop OCP master instances
+      gce:
+          name: "{{ item }}"
+          zone: "{{ zone }}"
+          state: stopped
+      register: gce
+      with_items:
+        - ocp-master-1
+        - ocp-master-2
+        - ocp-master-3
+      tags:
+        - stop_masters
+
+    - name: Stop OCP infra instances
+      gce:
+          name: "{{ item }}"
+          zone: "{{ zone }}"
+          state: stopped
+      register: gce
+      with_items:
+        - ocp-infra-1
+        - ocp-infra-2
+        - ocp-lb
+      tags:
+        - stop_infras
+
+    - name: Stop other instances
+      gce:
+          name: "{{ item }}"
+          zone: "{{ zone }}"
+          state: stopped
+      register: gce
+      with_items:
+        - ocp-bastion
+        - mgmt-cloudforms
+      tags:
+        - stop_others
