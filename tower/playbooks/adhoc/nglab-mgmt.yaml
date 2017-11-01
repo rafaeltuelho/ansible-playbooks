@@ -8,6 +8,19 @@
     zone: us-east1-b
 
   tasks:
+    - telegram:
+      token: "{{ telegram_bot_token }}"
+      chat_id: "{{ telegram_group_chat_id }}"
+      msg: "ATENCAO!!! o RHBRLAB/NGLAB sera desligado em 45min..."
+
+    - pause:
+      minutes: 45
+
+    - telegram:
+      token: "{{ telegram_bot_token }}"
+      chat_id: "{{ telegram_group_chat_id }}"
+      msg: "TIMEOUT!!! Desligando lab via Ansible Tower JOB..."
+
     - name: Stop OCP node instances
       gce:
           name: "{{ item }}"
